@@ -4,67 +4,58 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JobServiceImp implements JobService{
 
-    private List<Job> jobs = new ArrayList<>();
 
-    private int counter = 0;
+    JobRepository jobRepository;
+
+    public JobServiceImp(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
+    }
 
     @Override
     public List<Job> findAll() {
-        return jobs;
+        return jobRepository.findAll();
     }
 
     @Override
     public void createJob(Job job) {
-
-        job.setId(++counter);
-        jobs.add(job);
-
+       jobRepository.save(job);
     }
 
     @Override
     public Job findJobById(Long id) {
-        for(Job job : jobs)
-        {
-            if(job.getId()==id)
-               return job;
-        }
-
-        return null;
+        return jobRepository.findById(id).orElse(null);
     }
 
     @Override
     public Boolean removeJobById(Long id) {
-        for(Job job : jobs)
-        {
-            if(job.getId()==id)
-            {
-                jobs.remove(job);
-                return true;
-            }
+        try {
+            jobRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-
-        return false;
     }
 
     @Override
     public Boolean updateJobById(Long id, Job job) {
-        for(Job j : jobs)
-        {
-            if(j.getId()==id)
+        Optional<Job> optionalJob = jobRepository.findById(id);
+
+            if(optionalJob.isPresent())
             {
+                Job j = optionalJob.get();
                 j.setDescription(job.getDescription());
                 j.setTitle(job.getTitle());
                 j.setMinSalary(job.getMinSalary());
                 j.setMaxSalary(job.getMaxSalary());
                 j.setLocation(job.getLocation());
+                jobRepository.save(j);
                 return true;
             }
-        }
-
         return false;
     }
 }
