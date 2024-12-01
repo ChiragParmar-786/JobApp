@@ -47,13 +47,13 @@ public class JobServiceImp implements JobService{
 
             if(optionalJob.isPresent())
             {
-                Job j = optionalJob.get();
-                j.setDescription(job.getDescription());
-                j.setTitle(job.getTitle());
-                j.setMinSalary(job.getMinSalary());
-                j.setMaxSalary(job.getMaxSalary());
-                j.setLocation(job.getLocation());
-                jobRepository.save(j);
+                Job jobToUpdate = optionalJob.get();
+                jobToUpdate.setDescription(job.getDescription());
+                jobToUpdate.setTitle(job.getTitle());
+                jobToUpdate.setMinSalary(job.getMinSalary());
+                jobToUpdate.setMaxSalary(job.getMaxSalary());
+                jobToUpdate.setLocation(job.getLocation());
+                jobRepository.save(jobToUpdate);
                 return true;
             }
         return false;
