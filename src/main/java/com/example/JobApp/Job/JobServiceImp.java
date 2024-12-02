@@ -1,6 +1,7 @@
 package com.example.JobApp.Job;
 
 import com.example.JobApp.Company.CompanyRepository;
+import com.example.JobApp.Company.CompanyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +13,11 @@ public class JobServiceImp implements JobService{
 
     JobRepository jobRepository;
 
-    CompanyRepository companyRepository;
+    CompanyService companyService;
 
-    public JobServiceImp(JobRepository jobRepository,CompanyRepository companyRepository) {
+    public JobServiceImp(JobRepository jobRepository,CompanyService companyService) {
         this.jobRepository = jobRepository;
-        this.companyRepository = companyRepository;
+        this.companyService = companyService;
     }
 
 
@@ -27,7 +28,7 @@ public class JobServiceImp implements JobService{
 
     @Override
     public Boolean createJob(Job job) {
-        if(companyRepository.existsById(job.getCompany().getId())){
+        if(companyService.findCompanyById(job.getId()) != null){
             jobRepository.save(job);
             return true;
         }
