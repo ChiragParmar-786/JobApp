@@ -28,8 +28,11 @@ public class JobController {
     @PostMapping
     public ResponseEntity<String> createJob(@RequestBody Job job)
     {
-        jobService.createJob(job);
-        return new ResponseEntity<>("Job added successfully",HttpStatus.OK);
+        Boolean sts = jobService.createJob(job);
+        if(sts)
+           return new ResponseEntity<>("Job added successfully",HttpStatus.OK);
+        else
+           return new ResponseEntity<>("Company not found for given Id",HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")
@@ -47,7 +50,7 @@ public class JobController {
         if(sts)
             return new ResponseEntity<>("Job deleted Successfully",HttpStatus.OK);
         else
-            return new ResponseEntity<>("Job Not Found for given Id",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Job not found for given Id",HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{id}")

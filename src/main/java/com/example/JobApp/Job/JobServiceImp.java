@@ -1,8 +1,8 @@
 package com.example.JobApp.Job;
 
+import com.example.JobApp.Company.CompanyRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +12,13 @@ public class JobServiceImp implements JobService{
 
     JobRepository jobRepository;
 
-    public JobServiceImp(JobRepository jobRepository) {
+    CompanyRepository companyRepository;
+
+    public JobServiceImp(JobRepository jobRepository,CompanyRepository companyRepository) {
         this.jobRepository = jobRepository;
+        this.companyRepository = companyRepository;
     }
+
 
     @Override
     public List<Job> findAll() {
@@ -22,8 +26,14 @@ public class JobServiceImp implements JobService{
     }
 
     @Override
-    public void createJob(Job job) {
-       jobRepository.save(job);
+    public Boolean createJob(Job job) {
+        if(companyRepository.existsById(job.getCompany().getId())){
+            jobRepository.save(job);
+            return true;
+        }
+       else {
+            return false;
+        }
     }
 
     @Override
@@ -33,12 +43,13 @@ public class JobServiceImp implements JobService{
 
     @Override
     public Boolean removeJobById(Long id) {
-        try {
-            jobRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+       if(jobRepository.existsById(id)){
+           jobRepository.deleteById(id);
+           return true;
+       }
+       else{
+           return false;
+       }
     }
 
     @Override

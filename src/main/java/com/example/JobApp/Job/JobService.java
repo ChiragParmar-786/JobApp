@@ -6,7 +6,7 @@ public interface JobService {
 
     List<Job> findAll();
 
-    void createJob(Job job);
+    Boolean createJob(Job job);
 
     Job findJobById(Long id);
 

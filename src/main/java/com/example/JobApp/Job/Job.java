@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
     private String title;
     private String description;
